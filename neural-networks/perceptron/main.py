@@ -7,8 +7,6 @@ from sklearn.datasets import load_wine
 from sklearn.linear_model import Perceptron
 from single_perceptron import SinglePerceptron
 
-plt.style.use('seaborn-whitegrid')
-
 # Load the dataset
 dataset = load_wine()
 x = dataset.data
@@ -16,11 +14,13 @@ x = dataset.data
 # Show few lines of the dataset
 display(pd.DataFrame(data=dataset.data, columns=dataset.feature_names).head())
 
-# Get the classification targets
-y = [1 if y == 1 else -1 for y in dataset.target]
+# Get the classfication targets
+y = [ 1 if y == 1 else -1 for y in dataset.target ]
 
 # Split the dataset in train and test sets
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=1)
+
+plt.style.use('seaborn-whitegrid')
 
 # Setup a vector of iteration numbers
 iteration_numbers = np.append(10, np.append(np.random.randint(low=20, high=(len(x_train) - 10), size=9), len(x_train)))
@@ -28,6 +28,12 @@ iteration_numbers.sort()
 iteration_numbers = np.unique(iteration_numbers)
 
 learning_rates = [1e-1, 1e-2, 1e-3, 1e-4]
+
+best_train_model = []
+best_test_model = []
+
+best_train_parameters = []
+best_test_parameters = []
 
 # Create a set of models for each learning rate
 for learning_rate in learning_rates:
@@ -70,8 +76,15 @@ for learning_rate in learning_rates:
         test.append(i)
 
     # Find the index of the best model
+    index = int(np.argmax(train_scores))
+    print("Best train model: index = {}, score = {}".format(index, np.max(train_scores)))
+    best_train_model.append(np.max(train_scores))
+    best_train_parameters.append([learning_rate, iteration_numbers[index]])
+
     index = int(np.argmax(test_scores))
-    print("Best model: index = {}, score = {}".format(index, np.max(test_scores)))
+    print("Best test model: index = {}, score = {}".format(index, np.max(test_scores)))
+    best_test_model.append(np.max(test_scores))
+    best_test_parameters.append([learning_rate, iteration_numbers[index]])
 
     x_wrong_prediction = []
     y_wrong_prediction = []
@@ -89,7 +102,7 @@ for learning_rate in learning_rates:
     plt.xlabel("Values")
     plt.ylabel("Classification")
     plt.scatter(test, predictions[index], label="Prediction")
-    plt.scatter(test, y_test, label="Original values")
+    plt.plot(test, y_test, linestyle='dashed', label="Original values", color='red')
     plt.legend()
     plt.show()
 
@@ -109,7 +122,21 @@ for learning_rate in learning_rates:
     plt.legend()
     plt.show()
 
-# sklearn
+# Determine the best train and test models
+index = int(np.argmax(best_train_model))
+print("Best train model")
+print("Score: {}".format(np.max(best_train_model)))
+print("Learning rate: {}".format(best_train_parameters[index][0]))
+print("Iteration number: {}".format(best_train_parameters[index][1]))
+print()
+
+index = int(np.argmax(best_test_model))
+print("Best test model")
+print("Score: {}".format(np.max(best_test_model)))
+print("Learning rate: {}".format(best_test_parameters[index][0]))
+print("Iteration number: {}".format(best_test_parameters[index][1]))
+
+# Run Perceptron of sklearn
 model = Perceptron(tol=1e-3, random_state=23, max_iter=len(x))
 model.fit(x_train, y_train)
 train_score = model.score(x_train, y_train)
