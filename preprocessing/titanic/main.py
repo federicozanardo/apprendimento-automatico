@@ -5,9 +5,7 @@ Notebook: https://colab.research.google.com/drive/1qXRSQZDgTrknjUBVj9r31kRFNhNlM
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score
@@ -86,12 +84,12 @@ X.Age.fillna(X.Age.median(), inplace=True)
 X['Embarked'] = SimpleImputer(missing_values=np.NaN, strategy='most_frequent').fit_transform(
     np.array(X['Embarked'].values)[:, np.newaxis])
 
-# Apply the 'LabelEncoder'
-label_encoder = LabelEncoder()
-X['Embarked'] = label_encoder.fit_transform(X['Embarked'])
+# Apply the 'OrdinalEncoder'
+ordinal_encoder = OrdinalEncoder()
+X[['Embarked']] = ordinal_encoder.fit_transform(X[['Embarked']])
 
-print("Classes")
-print(label_encoder.classes_)
+print("Categories")
+print(ordinal_encoder.categories_)
 
 # Split the dataset in training set and test set
 X_train, X_test, y_train, y_test1 = train_test_split(X, y, test_size=0.20, random_state=42)
@@ -164,8 +162,8 @@ X_dirty.Age.fillna(X_dirty.Age.median(), inplace=True)
 X_dirty['Embarked'] = SimpleImputer(missing_values=np.NaN, strategy='most_frequent').fit_transform(
     np.array(X_dirty['Embarked'].values)[:, np.newaxis])
 
-label_encoder = LabelEncoder()
-X_dirty['Embarked'] = label_encoder.fit_transform(X['Embarked'])
+ordinal_encoder = OrdinalEncoder()
+X_dirty[['Embarked']] = ordinal_encoder.fit_transform(X[['Embarked']])
 
 # Check that 'Cabin' has no missing values
 print("Cabin: {}".format(X_dirty.Cabin.isnull().sum()))
@@ -174,12 +172,12 @@ print("Cabin: {}".format(X_dirty.Cabin.isnull().sum()))
 X_dirty['Cabin'] = SimpleImputer(missing_values=np.NaN, strategy='most_frequent').fit_transform(
     np.array(X_dirty['Cabin'].values)[:, np.newaxis])
 
-# Apply the 'LabelEncoder'
-label_encoder = LabelEncoder()
-X_dirty['Cabin'] = label_encoder.fit_transform(X_dirty['Cabin'])
+# Apply the 'OrdinalEncoder'
+ordinal_encoder = OrdinalEncoder()
+X_dirty[['Cabin']] = ordinal_encoder.fit_transform(X_dirty[['Cabin']])
 
-print("Classes")
-print(label_encoder.classes_)
+print("Categories")
+print(ordinal_encoder.categories_)
 print()
 
 print("X_dirty['Cabin'].head()")
@@ -231,8 +229,8 @@ X_dirty['Sex'] = OneHotEncoder(categories='auto').fit_transform(
 X_dirty['Embarked'] = SimpleImputer(missing_values=np.NaN, strategy='most_frequent').fit_transform(
     np.array(X_dirty['Embarked'].values)[:, np.newaxis])
 
-label_encoder = LabelEncoder()
-X_dirty['Embarked'] = label_encoder.fit_transform(X['Embarked'])
+ordinal_encoder = OrdinalEncoder()
+X_dirty[['Embarked']] = ordinal_encoder.fit_transform(X[['Embarked']])
 
 # Split the dataset
 X_train, X_test, y_train, y_test3 = train_test_split(X_dirty, y, test_size=0.20, random_state=42)
