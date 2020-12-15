@@ -10,3 +10,6 @@ A **convolution** is a filter that is applied to an image, processes it and extr
 The application of the filter therefore allows to highlight the details of the images in such a way that it is possible to derive their meaning and identify the objects. Specifically, a filter consists of a set of multipliers.
 
 In this project I built a first version of a CNN. The second version is an optimization of the first.
+
+## Dataset
+The dataset is provided by [Tensorflow](https://www.tensorflow.org/datasets/catalog/cifar10).
