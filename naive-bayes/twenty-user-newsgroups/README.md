@@ -1,4 +1,4 @@
-# Naive Bayes for Twenty User Newsgroup's dataset
+# Naive Bayes for Twenty User Newsgroups' dataset
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EP5l6bvfik2rhso8l360fzC-NtZmr7NU)
 
